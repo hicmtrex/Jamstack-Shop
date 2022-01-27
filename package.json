@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "export": "next export"
+    "export": "next build && next export"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^1.7.0",
