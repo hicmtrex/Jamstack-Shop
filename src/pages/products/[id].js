@@ -131,7 +131,11 @@ const ProductDetail = ({ product }) => {
                 </Col>
                 <Col
                   md={2}
-                  style={{ backgroundColor: picker, border: '1px solid black' }}
+                  style={{
+                    backgroundColor: picker,
+                    border: '1px solid black',
+                    minHeight: '2rem',
+                  }}
                 ></Col>
               </Row>
             </ListGroup.Item>
