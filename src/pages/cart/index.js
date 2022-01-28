@@ -28,11 +28,12 @@ const CartPage = () => {
   const router = useRouter();
 
   const handlerCheckout = () => {
-    if (!user) {
-      return router.push('/api/auth/login');
-    } else {
-      router.push('/cart/checkout');
-    }
+    // if (!user) {
+    //   return router.push('/api/auth/login');
+    // } else {
+    //   router.push('/cart/checkout');
+    // }
+    router.push('/cart/checkout');
   };
 
   return (
