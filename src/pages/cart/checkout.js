@@ -28,16 +28,16 @@ const Checkout = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    saveAddress({
-      user: user.nickname,
-      firstName,
-      email,
-      country,
-      address,
-      postalCode,
-      phone,
-      state,
-    });
+    // saveAddress({
+    //   user: user.nickname,
+    //   firstName,
+    //   email,
+    //   country,
+    //   address,
+    //   postalCode,
+    //   phone,
+    //   state,
+    // });
 
     router.push('/cart/placeorder');
   };
