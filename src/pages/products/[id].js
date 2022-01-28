@@ -7,20 +7,20 @@ import { useContext, useState } from 'react';
 import Store from '../../store/context-api';
 
 const ProductDetail = ({ product }) => {
-  const { name, price, description } = product.attributes;
+  const { name, price, description, category } = product.attributes;
   //const category = product.attributes.category.data.attributes.name;
 
-  const categoriesTracker = name.split('-')[1].trim();
+  // const categoriesTracker = name.split('-')[1].trim();
 
-  let category = '';
+  // let category = '';
 
-  if (categoriesTracker === 'hats') {
-    category = 'hats';
-  } else if (categoriesTracker === 'hoodie') {
-    category = 'hoodie';
-  } else {
-    category = 'shirt';
-  }
+  // if (categoriesTracker === 'hats') {
+  //   category = 'hats';
+  // } else if (categoriesTracker === 'hoodie') {
+  //   category = 'hoodie';
+  // } else {
+  //   category = 'shirt';
+  // }
 
   const [selectImage, setSelectImage] = useState(0);
   const [size, setSize] = useState('S');
