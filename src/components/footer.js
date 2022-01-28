@@ -16,14 +16,14 @@ const Footer = () => {
               </div>
               <div className='information_f'>
                 <p>
-                  <strong>ADDRESS:</strong> 28 White tower, Street Name New York
-                  City, USA
+                  <strong>ADDRESS:</strong> 10 White tower, street Marseille
+                  Tunis, Tunisia
                 </p>
                 <p>
-                  <strong>TELEPHONE:</strong> +91 987 654 3210
+                  <strong>TELEPHONE:</strong> +216 987 654 3210
                 </p>
                 <p>
-                  <strong>EMAIL:</strong> yourmain@gmail.com
+                  <strong>EMAIL:</strong> hicm@gmail.com
                 </p>
               </div>
             </div>
