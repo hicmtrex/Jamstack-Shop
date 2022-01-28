@@ -85,9 +85,9 @@ const Header = () => {
                 </NavDropdown>
               ) : (
                 <li className='nav-item'>
-                  <Link href={'/api/auth/login'} passHref>
-                    <a className='nav-link ms-5'>Login</a>
-                  </Link>
+                  <a className='nav-link ms-5' href={'/api/auth/login'}>
+                    Login
+                  </a>
                 </li>
               )}
             </ul>
