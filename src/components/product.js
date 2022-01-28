@@ -6,9 +6,7 @@ import { baseUrl } from '../../utils/help-api';
 const Product = ({ product }) => {
   const { name, price, description } = product.attributes;
   const randomNumber = Math.floor(Math.random() * 4);
-  const image = `https://strapi-testhicm.herokuapp.com${product.attributes.images.data[randomNumber].attributes.url}`;
-
-  console.log(randomNumber);
+  const image = product.attributes.images[randomNumber].path;
 
   return (
     <Card className='my-3 p-3 rounded shadow'>

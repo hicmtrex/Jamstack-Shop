@@ -25,9 +25,9 @@ const ProductDetail = ({ product }) => {
   const [selectImage, setSelectImage] = useState(0);
   const [size, setSize] = useState('S');
 
-  const image = `https://strapi-testhicm.herokuapp.com${product.attributes.images.data[selectImage].attributes.url}`;
-  const images = product.attributes.images.data;
-
+  const image = product.attributes.images[selectImage].path;
+  const images = product.attributes.images;
+  console.log(images);
   //state
   const { addToCart } = useContext(Store);
 
@@ -81,7 +81,7 @@ const ProductDetail = ({ product }) => {
                       onClick={() => setSelectImage(index)}
                     >
                       <Image
-                        src={`https://strapi-testhicm.herokuapp.com${img.attributes.url}`}
+                        src={img.path}
                         layout='responsive'
                         height={40}
                         width={50}

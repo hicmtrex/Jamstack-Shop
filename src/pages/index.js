@@ -5,6 +5,7 @@ import { getAllProducts } from '../../utils/help-api';
 import Product from '../components/product';
 
 const HomePage = ({ products }) => {
+  console.log(products);
   return (
     <>
       <Head>

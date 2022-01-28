@@ -9,9 +9,9 @@ const PlaceOrder = () => {
   const { cartItems, shippingAddress } = useContext(Store);
   const router = useRouter();
 
-  useEffect(() => {
-    if (!shippingAddress) return router.push('/cart/checkout');
-  }, [shippingAddress]);
+  // useEffect(() => {
+  //   if (!shippingAddress) return router.push('/cart/checkout');
+  // }, [shippingAddress]);
 
   const totalPrice = cartItems
     ?.reduce((acc, i) => acc + i.price * i.qty, 0)
@@ -24,6 +24,10 @@ const PlaceOrder = () => {
     Number(shippingPrice) +
     Number(taxPrice)
   ).toFixed(2);
+
+  const paypalHandler = () => {
+    router.push('/');
+  };
 
   const order = {};
   return (
@@ -78,7 +82,7 @@ const PlaceOrder = () => {
                     <Row>
                       <Col md={1}>
                         <Image
-                          src={`https://strapi-testhicm.herokuapp.com${item.images.data[0].attributes.url}`}
+                          src={item.images[0].path}
                           alt={item.name}
                           fluid
                           rounded
@@ -134,7 +138,7 @@ const PlaceOrder = () => {
               </Row>
             </ListGroup.Item>
 
-            <PayPalButton />
+            <PayPalButton amount={lastPrice} onSuccess={paypalHandler} />
           </ListGroup>
         </Card>
       </Col>

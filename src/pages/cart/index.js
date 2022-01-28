@@ -17,7 +17,7 @@ import Store from '../../store/context-api';
 const CartPage = () => {
   const { cartItems, addToCart, removeFromCart, deleteFromCart } =
     useContext(Store);
-
+  console.log(cartItems);
   const totalPrice = cartItems
     ?.reduce((acc, i) => acc + i.price * i.qty, 0)
     .toFixed(2);
@@ -62,10 +62,7 @@ const CartPage = () => {
                   {cartItems.map((item) => (
                     <tr key={item.id}>
                       <td className='image' data-title='No'>
-                        <Image
-                          src={`https://strapi-testhicm.herokuapp.com${item.images.data[0].attributes.url}`}
-                          alt='#'
-                        />
+                        <Image src={item.images[0].path} alt='#' />
                       </td>
                       <td className='product-des' data-title='Description'>
                         <p className='product-name'>
