@@ -11,6 +11,7 @@ import {
   Col,
   Container,
 } from 'react-bootstrap';
+import { baseUrl } from '../../../utils/help-api';
 import Store from '../../store/context-api';
 
 const CartPage = () => {
@@ -62,10 +63,7 @@ const CartPage = () => {
                     <tr key={item.id}>
                       <td className='image' data-title='No'>
                         <Image
-                          src={
-                            'http://localhost:1337' +
-                            item.image.data[0].attributes.url
-                          }
+                          src={`https://strapi-testhicm.herokuapp.com${item.images.data[0].attributes.url}`}
                           alt='#'
                         />
                       </td>

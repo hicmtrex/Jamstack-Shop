@@ -94,7 +94,7 @@ const ContextProvider = ({ children }) => {
         id: product.id,
         name: product.attributes?.name,
         price: product.attributes?.price,
-        image: product.attributes?.image,
+        images: product.attributes?.images,
         qty: product.qty,
         size,
       },

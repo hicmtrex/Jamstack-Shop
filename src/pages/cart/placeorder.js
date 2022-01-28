@@ -78,10 +78,7 @@ const PlaceOrder = () => {
                     <Row>
                       <Col md={1}>
                         <Image
-                          src={
-                            'http://localhost:1337' +
-                            item.image.data[0].attributes.url
-                          }
+                          src={`https://strapi-testhicm.herokuapp.com${item.images.data[0].attributes.url}`}
                           alt={item.name}
                           fluid
                           rounded
