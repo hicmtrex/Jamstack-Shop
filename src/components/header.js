@@ -13,7 +13,6 @@ const Header = () => {
   const { user, isLoading } = useUser();
   const { cartItems, logoutHandler } = useContext(Store);
 
-  console.log(user);
   return (
     <header className='header_section'>
       <Navbar expand='lg' collapseOnSelect className='custom_nav-container '>

@@ -155,7 +155,9 @@ const CartPage = () => {
                       </Button>
 
                       <Link href='/' passHref>
-                        <Button variant='primary'>Continue shopping</Button>
+                        <Button variant='dark' className='py-2'>
+                          Continue shopping
+                        </Button>
                       </Link>
                     </div>
                   </div>
