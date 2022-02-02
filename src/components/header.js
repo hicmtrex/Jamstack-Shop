@@ -1,16 +1,10 @@
 import React, { useState, useContext } from 'react';
-import {
-  Navbar,
-  Container,
-  Nav,
-  NavDropdown,
-  Image,
-  Spinner,
-} from 'react-bootstrap';
+import { Navbar, Container, Nav, NavDropdown, Spinner } from 'react-bootstrap';
 import Link from 'next/link';
 import CartSvg from './icons/cart-svg';
 import { useUser } from '@auth0/nextjs-auth0';
 import Store from '../store/context-api';
+import Image from 'next/image';
 
 const Header = () => {
   const [show, setShow] = useState(false);
@@ -19,6 +13,7 @@ const Header = () => {
   const { user, isLoading } = useUser();
   const { cartItems, logoutHandler } = useContext(Store);
 
+  console.log(user);
   return (
     <header className='header_section'>
       <Navbar expand='lg' collapseOnSelect className='custom_nav-container '>
@@ -26,7 +21,13 @@ const Header = () => {
           <Navbar.Brand>
             <Link href={'/'} passHref>
               <a className='navbar-brand'>
-                <Image width={150} src='images/Jamstack_Logo.png' alt='logo' />
+                <Image
+                  width={150}
+                  height={50}
+                  layout='intrinsic'
+                  src='/images/Jamstack_Logo.png'
+                  alt='logo'
+                />
               </a>
             </Link>
           </Navbar.Brand>
@@ -39,9 +40,15 @@ const Header = () => {
                   <a className='nav-link'>Home</a>
                 </Link>
               </Nav.Link>
+
               <Nav.Link className='nav-item'>
                 <Link href={'#products'} passHref>
                   <a className='nav-link'>Products</a>
+                </Link>
+              </Nav.Link>
+              <Nav.Link className='nav-item'>
+                <Link href={'#about'} passHref>
+                  <a className='nav-link'>About</a>
                 </Link>
               </Nav.Link>
             </Nav>
@@ -58,19 +65,14 @@ const Header = () => {
               {!isLoading && <Spinner />}
               {user ? (
                 <NavDropdown
+                  className='ms-3'
                   title={
-                    user.picture ? (
-                      <Image
-                        style={{ width: '35px', height: '30px' }}
-                        roundedCircle={true}
-                        fluid={true}
-                        src={user.picture}
-                        thumbnail={true}
-                        alt='user picture'
-                      />
-                    ) : (
-                      user.given_name
-                    )
+                    <Image
+                      width={35}
+                      height={30}
+                      src={user?.picture}
+                      className='rounded'
+                    />
                   }
                   id='username'
                 >

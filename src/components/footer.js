@@ -1,17 +1,24 @@
 import Link from 'next/link';
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import Image from 'next/image';
 
 const Footer = () => {
   return (
-    <footer>
+    <footer id='about'>
       <Container>
         <Row>
           <Col md={4}>
             <div className='full'>
               <div className='logo_footer'>
                 <a href='#'>
-                  <img width='210' src='images/Jamstack_Logo.png' alt='#' />
+                  <Image
+                    width={180}
+                    height={50}
+                    layout='intrinsic'
+                    src='/images/Jamstack_Logo.png'
+                    alt='#'
+                  />
                 </a>
               </div>
               <div className='information_f'>

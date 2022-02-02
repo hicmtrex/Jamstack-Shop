@@ -1,6 +1,7 @@
 import { useUser } from '@auth0/nextjs-auth0';
 import React from 'react';
-import { Row, Col, ListGroup, Spinner, Image } from 'react-bootstrap';
+import { Row, Col, ListGroup, Spinner } from 'react-bootstrap';
+import Image from 'next/image';
 
 const Profile = () => {
   const { user, isLoading } = useUser();
@@ -10,13 +11,13 @@ const Profile = () => {
     <Row>
       <Col md={6}>
         <Image
-          fluid
-          thumbnail
+          height={150}
           src={user.picture}
-          style={{ width: '200px' }}
-          roundedCircle={true}
+          layout='intrinsic'
+          width={200}
+          className='rounded'
         />
-        <h2>Information</h2>
+        <h2>User Information</h2>
         <ListGroup variant='flush'>
           <ListGroup.Item>Email : {user.email}</ListGroup.Item>
           <ListGroup.Item>Name : {user.name}</ListGroup.Item>
