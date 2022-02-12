@@ -20,12 +20,16 @@ const ACTIONS = {
 
 const userInfoStorage =
   typeof window !== 'undefined'
-    ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER))
+    ? localStorage.getItem(LOCAL_STORAGE_USER)
+      ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER))
+      : null
     : null;
 
 const cartInfoStorage =
   typeof window !== 'undefined'
-    ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_CART))
+    ? localStorage.getItem(LOCAL_STORAGE_CART)
+      ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_CART))
+      : []
     : [];
 
 const initialState = {
