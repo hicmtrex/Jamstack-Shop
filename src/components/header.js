@@ -1,8 +1,7 @@
 import React, { useState, useContext } from 'react';
-import { Navbar, Container, Nav, NavDropdown, Spinner } from 'react-bootstrap';
+import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
 import Link from 'next/link';
 import CartSvg from './icons/cart-svg';
-import { useUser } from '@auth0/nextjs-auth0';
 import Store from '../store/context-api';
 import Image from 'next/image';
 
@@ -10,8 +9,7 @@ const Header = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const { user, isLoading } = useUser();
-  const { cartItems, logoutHandler } = useContext(Store);
+  const { cartItems, logoutHandler, userInfo } = useContext(Store);
 
   return (
     <header className='header_section'>
@@ -41,12 +39,18 @@ const Header = () => {
               </Nav.Link>
 
               <Nav.Link className='nav-item'>
-                <Link href={'#products'} passHref>
+                <a className='nav-link'></a>
+              </Nav.Link>
+              <Nav.Link className='nav-item'>
+                <Link href='#products' passHref>
                   <a className='nav-link'>Products</a>
                 </Link>
               </Nav.Link>
               <Nav.Link className='nav-item'>
-                <Link href={'#about'} passHref>
+                <a className='nav-link'></a>
+              </Nav.Link>
+              <Nav.Link className='nav-item'>
+                <Link href='#about' passHref>
                   <a className='nav-link'>About</a>
                 </Link>
               </Nav.Link>
@@ -61,24 +65,15 @@ const Header = () => {
                   </a>
                 </Link>
               </li>
-              {!isLoading && <Spinner />}
-              {user ? (
+
+              {userInfo ? (
                 <NavDropdown
                   className='ms-3'
-                  title={
-                    <Image
-                      width={35}
-                      height={30}
-                      src={user?.picture}
-                      className='rounded'
-                    />
-                  }
+                  title={userInfo?.user.username}
                   id='username'
                 >
                   <Link href={'/users/profile'} passHref>
-                    <NavDropdown.Item>
-                      {user.given_name} Profile
-                    </NavDropdown.Item>
+                    <NavDropdown.Item>Profile</NavDropdown.Item>
                   </Link>
                   <NavDropdown.Item>
                     <a onClick={logoutHandler}>Logout</a>
@@ -86,7 +81,7 @@ const Header = () => {
                 </NavDropdown>
               ) : (
                 <li className='nav-item'>
-                  <Link href={'/api/auth/login'} passHref>
+                  <Link href={'/users/login'} passHref>
                     <a className='nav-link ms-5'>Login</a>
                   </Link>
                 </li>

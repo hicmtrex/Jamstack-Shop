@@ -1,4 +1,3 @@
-import { useUser } from '@auth0/nextjs-auth0';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
@@ -11,7 +10,6 @@ import {
   Col,
   Container,
 } from 'react-bootstrap';
-import { baseUrl } from '../../../utils/help-api';
 import Store from '../../store/context-api';
 
 const CartPage = () => {
@@ -25,15 +23,9 @@ const CartPage = () => {
   const shippingPrice = totalPrice >= 500 ? 0 : 50;
   const lastPrice = (Number(totalPrice) + Number(shippingPrice)).toFixed(2);
 
-  const { user } = useUser();
   const router = useRouter();
 
   const handlerCheckout = () => {
-    // if (!user) {
-    //   return router.push('/api/auth/login');
-    // } else {
-    //   router.push('/cart/checkout');
-    // }
     router.push('/cart/checkout');
   };
 
@@ -48,7 +40,8 @@ const CartPage = () => {
                   <th>PRODUCT</th>
                   <th>NAME</th>
                   <th className='text-center '>UNIT PRICE</th>
-                  <th className='text-center'>Size</th>
+
+                  <th className='text-center'>Color</th>
                   <th className='text-center'>QUANTITY</th>
                   <th className='text-center'>TOTAL</th>
                   <th className='text-center'>
@@ -62,7 +55,7 @@ const CartPage = () => {
                   {cartItems.map((item) => (
                     <tr key={item.id}>
                       <td className='image' data-title='No'>
-                        <Image src={item.images[0].path} alt='#' />
+                        <Image src={item.images[item.color].path} alt='#' />
                       </td>
                       <td className='product-des' data-title='Description'>
                         <p className='product-name'>
@@ -77,6 +70,7 @@ const CartPage = () => {
                       <td className='price' data-title='Price'>
                         <span>{item.size}</span>
                       </td>
+
                       <td className='qty' data-title='Qty'>
                         <div className='input-group ms-md-5 '>
                           <div className='button minus'>

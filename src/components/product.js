@@ -1,10 +1,9 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import Link from 'next/link';
-import { baseUrl } from '../../utils/help-api';
 
 const Product = ({ product }) => {
-  const { name, price, description } = product.attributes;
+  const { name, price } = product.attributes;
   const randomNumber = Math.floor(Math.random() * 4);
   const image = product.attributes.images[randomNumber].path;
 
@@ -25,6 +24,3 @@ const Product = ({ product }) => {
 };
 
 export default Product;
-{
-  /* <Card.Text>{description}</Card.Text> */
-}

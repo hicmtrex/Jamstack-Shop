@@ -357,7 +357,7 @@ form input {
   width: 100%;
   font-size: 14px;
   margin-bottom: 20px;
-  text-transform: capitalize;
+
   line-height: normal;
 }
 
@@ -369,7 +369,7 @@ form textarea {
   min-height: 150px;
   font-size: 14px;
   margin-bottom: 20px;
-  text-transform: capitalize;
+
   line-height: normal;
 }
 
@@ -378,7 +378,7 @@ form input[type='submit'] {
   padding: 15px 45px;
   width: auto;
   font-size: 16px;
-  text-transform: capitalize;
+
   line-height: normal;
   margin: 0 auto;
   display: flex;

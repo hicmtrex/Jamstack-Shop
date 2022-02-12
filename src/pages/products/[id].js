@@ -8,26 +8,12 @@ import Store from '../../store/context-api';
 
 const ProductDetail = ({ product }) => {
   const { name, price, description, category } = product.attributes;
-  //const category = product.attributes.category.data.attributes.name;
-
-  // const categoriesTracker = name.split('-')[1].trim();
-
-  // let category = '';
-
-  // if (categoriesTracker === 'hats') {
-  //   category = 'hats';
-  // } else if (categoriesTracker === 'hoodie') {
-  //   category = 'hoodie';
-  // } else {
-  //   category = 'shirt';
-  // }
 
   const [selectImage, setSelectImage] = useState(0);
   const [size, setSize] = useState('S');
 
   const image = product.attributes.images[selectImage].path;
   const images = product.attributes.images;
-  console.log(images);
   //state
   const { addToCart } = useContext(Store);
 
@@ -145,7 +131,7 @@ const ProductDetail = ({ product }) => {
               <Link href='/cart' passHref>
                 <Button
                   variant='danger'
-                  onClick={() => addToCart(product, size)}
+                  onClick={() => addToCart(product, selectImage, size)}
                   className='col-12'
                 >
                   Add To Cart

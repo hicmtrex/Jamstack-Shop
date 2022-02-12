@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { useEffect, useReducer } from 'react';
+import { baseUrl } from '../../utils/help-api';
 import Store from './context-api';
 
-const LOCAL_STORAGE = 'jamstack-cartItems';
+const LOCAL_STORAGE_CART = 'jamstack-shop-cartItems';
+const LOCAL_STORAGE_USER = 'jamstack-shop-user';
 
 const ACTIONS = {
   ADD_TO_CART: 'ADD_TO_CART',
@@ -11,16 +13,25 @@ const ACTIONS = {
   DELETE_FROM_CART: 'DELETE_FROM_CART',
   CLEAR_CART: 'CLEAR_CART',
   SHIPPING_ADDRESS: 'SHIPPING_ADDRESS',
+  //auth
+  USER_REGISTER: 'USER_REGISTER',
+  USER_LOGIN: 'USER_LOGIN',
 };
 
+const userInfoStorage =
+  typeof window !== 'undefined'
+    ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_USER))
+    : null;
+
+const cartInfoStorage =
+  typeof window !== 'undefined'
+    ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_CART))
+    : [];
+
 const initialState = {
-  cartItems:
-    typeof window !== 'undefined'
-      ? localStorage.getItem(LOCAL_STORAGE)
-        ? JSON.parse(localStorage.getItem(LOCAL_STORAGE))
-        : []
-      : null,
+  userInfo: userInfoStorage,
   shippingAddress: null,
+  cartItems: cartInfoStorage,
 };
 
 const reducer = (state, action) => {
@@ -33,6 +44,7 @@ const reducer = (state, action) => {
 
       if (existProduct) {
         return {
+          ...state,
           cartItems: state.cartItems.map((item) =>
             item.id === product.id
               ? { ...existProduct, qty: item.qty + 1 }
@@ -41,6 +53,7 @@ const reducer = (state, action) => {
         };
       } else {
         return {
+          ...state,
           cartItems: [...state.cartItems, { ...product, qty: 1 }],
         };
       }
@@ -52,12 +65,14 @@ const reducer = (state, action) => {
 
       if (existItem.qty === 1) {
         return {
+          ...state,
           cartItems: state.cartItems.filter(
             (item) => item.id !== productItem.id
           ),
         };
       } else {
         return {
+          ...state,
           cartItems: state.cartItems.map((item) =>
             item.id === productItem.id
               ? { ...existItem, qty: item.qty - 1 }
@@ -68,6 +83,7 @@ const reducer = (state, action) => {
     case ACTIONS.DELETE_FROM_CART:
       const productDelete = action.payload;
       return {
+        ...state,
         cartItems: state.cartItems.filter(
           (item) => item.id !== productDelete.id
         ),
@@ -77,6 +93,10 @@ const reducer = (state, action) => {
       return { cartItems: [] };
     case ACTIONS.SHIPPING_ADDRESS:
       return { ...state, shippingAddress: action.payload };
+    case ACTIONS.USER_REGISTER:
+      return { ...state, userInfo: action.payload };
+    case ACTIONS.USER_LOGIN:
+      return { ...state, userInfo: action.payload };
     default:
       return state;
   }
@@ -87,7 +107,7 @@ const ContextProvider = ({ children }) => {
   const router = useRouter();
 
   //Cart
-  const addToCart = (product, size) => {
+  const addToCart = (product, color, size) => {
     dispatch({
       type: ACTIONS.ADD_TO_CART,
       payload: {
@@ -96,6 +116,7 @@ const ContextProvider = ({ children }) => {
         price: product.attributes?.price,
         images: product.attributes?.images,
         qty: product.qty,
+        color,
         size,
       },
     });
@@ -109,26 +130,52 @@ const ContextProvider = ({ children }) => {
     dispatch({ type: ACTIONS.DELETE_FROM_CART, payload: product });
   };
 
-  const saveAddress = (address, cart) => {
+  const saveAddress = (address) => {
     dispatch({ type: ACTIONS.SHIPPING_ADDRESS, payload: address });
   };
 
-  //logout
+  //user
+
+  const userRegister = async (user) => {
+    try {
+      const { data } = await axios.post(
+        `${baseUrl}/api/auth/local/register`,
+        user,
+        {
+          headers: {
+            Accept: 'application/json',
+          },
+        }
+      );
+      dispatch({ type: ACTIONS.USER_REGISTER, payload: data });
+      localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const userLogin = async (user) => {
+    try {
+      const { data } = await axios.post(
+        `https://strapi-testhicm.herokuapp.com/api/auth/local`,
+        user
+      );
+      dispatch({ type: ACTIONS.USER_LOGIN, payload: data });
+      localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(data));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const logoutHandler = () => {
     dispatch({ type: ACTIONS.CLEAR_CART });
-    localStorage.removeItem(LOCAL_STORAGE);
-    router.push('/api/auth/logout');
+    localStorage.removeItem(LOCAL_STORAGE_CART);
+    localStorage.removeItem(LOCAL_STORAGE_USER);
+    router.push('/users/login');
   };
 
-  // const createOrder = async (order) => {
-  //   try {
-  //     const order = await axios.post('http://localhost:1337/api/orders', order);
-  //   } catch (error) {}
-  // };
-
   useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE, JSON.stringify(state.cartItems));
+    localStorage.setItem(LOCAL_STORAGE_CART, JSON.stringify(state.cartItems));
   }, [state.cartItems]);
 
   const values = {
@@ -138,7 +185,11 @@ const ContextProvider = ({ children }) => {
     removeFromCart,
     deleteFromCart,
     saveAddress,
+    //auth
     logoutHandler,
+    userRegister,
+    userLogin,
+    userInfo: state.userInfo,
   };
   return <Store.Provider value={values}>{children}</Store.Provider>;
 };
