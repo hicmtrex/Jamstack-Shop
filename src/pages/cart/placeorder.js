@@ -1,5 +1,13 @@
 import React, { useContext, useEffect } from 'react';
-import { Row, Col, ListGroup, Image, Card, Alert } from 'react-bootstrap';
+import {
+  Row,
+  Col,
+  ListGroup,
+  Image,
+  Card,
+  Alert,
+  Table,
+} from 'react-bootstrap';
 import Store from '../../store/context-api';
 import Link from 'next/link';
 import { PayPalButton } from 'react-paypal-button-v2';
@@ -33,74 +41,104 @@ const PlaceOrder = () => {
   return (
     <Row>
       <Col md={8}>
-        <ListGroup variant='flush'>
-          <ListGroup.Item>
-            <h2>User</h2>
-            <p>
-              <strong>Name: </strong> {shippingAddress?.user}
-            </p>
-            <p>
-              <strong>Email: </strong>{' '}
-              <a href={`mailto:${shippingAddress?.email}`}>
-                {shippingAddress?.email}
-              </a>
-            </p>
-            {/* <p>
-            <strong>Address:</strong>
-            {order.shippingAddress.address}, {order.shippingAddress.city}{" "}
-            {order.shippingAddress.postalCode},{" "}
-            {order.shippingAddress.country}
-          </p> */}
-          </ListGroup.Item>
+        <h2>User Address</h2>
+        <Table striped hover responsive className='table shopping-summery'>
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Address</th>
+              <th>Country</th>
+              <th>Phone</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className='price' data-title='Price'>
+                {shippingAddress.firstName}
+              </td>
+              <td className='price' data-title='Price'>
+                {shippingAddress?.address} - {shippingAddress?.state}
+              </td>
+              <td className='price' data-title='Price'>
+                {shippingAddress?.country}
+              </td>
 
-          <ListGroup.Item>
-            <h2>Shipping Address</h2>
-            <p>
-              <strong>
-                Address : {shippingAddress?.address} - {shippingAddress?.state}
-              </strong>
-            </p>
-            <p>
-              <strong>Postal Code : {shippingAddress?.postalCode} </strong>
-            </p>
-            <p>
-              <strong>Phone : {shippingAddress?.phone} </strong>
-            </p>
-            <p>
-              <strong>Country : {shippingAddress?.country} </strong>
-            </p>
-          </ListGroup.Item>
+              <td className='price' data-title='Price'>
+                {shippingAddress.phone}
+              </td>
+            </tr>
+          </tbody>
+        </Table>
 
-          <ListGroup.Item>
-            <h2>Order Items</h2>
-            {cartItems?.length === 0 ? (
-              <Alert>Order is empty</Alert>
-            ) : (
-              <ListGroup variant='flush'>
-                {cartItems?.map((item, index) => (
-                  <ListGroup.Item key={index}>
-                    <Row>
-                      <Col md={1}>
-                        <Image
-                          src={item.images[0].path}
-                          alt={item.name}
-                          fluid
-                          rounded
-                        />
-                      </Col>
-                      <Col>
-                        <Link href={`/product/${item.id}`}>{item.name}</Link>
-                      </Col>
-                      <Col md={4}>
-                        {item.qty} x ${item.price} = ${item.qty * item.price}
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-            )}
-          </ListGroup.Item>
-        </ListGroup>
+        <h2>Order Items</h2>
+        {cartItems?.length === 0 ? (
+          <Alert>Order is empty</Alert>
+        ) : (
+          <Table striped hover responsive className='table shopping-summery'>
+            <thead>
+              <tr>
+                <th>PRODUCT</th>
+                <th>NAME</th>
+                <th className='text-center '>UNIT PRICE</th>
+
+                <th className='text-center'>Size</th>
+                <th className='text-center'>QUANTITY</th>
+                <th className='text-center'>TOTAL</th>
+              </tr>
+            </thead>
+            <tbody>
+              {cartItems?.map((item, index) => (
+                <tr key={index}>
+                  <td className='image' data-title='No'>
+                    <Image src={item.images[item.color].path} alt='#' />
+                  </td>
+                  <td className='product-des' data-title='Description'>
+                    <p className='product-name'>
+                      <Link href={`/products/${item.id}`}>
+                        <a>{item.name}</a>
+                      </Link>
+                    </p>
+                  </td>
+                  <td className='price' data-title='Price'>
+                    <span>${item.price}</span>
+                  </td>
+                  <td className='price' data-title='Price'>
+                    <span>{item.size}</span>
+                  </td>
+                  <td className='price' data-title='Qty'>
+                    <span>{item.qty}</span>
+                  </td>
+                  <td className='price' data-title='Price'>
+                    <span>${item.qty * item.price}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+
+          // <ListGroup variant='flush'>
+          //   {cartItems?.map((item, index) => (
+          //     <ListGroup.Item key={index}>
+          //       <Row>
+          //         <Col md={1}>
+          //           <Image
+          //             src={item.images[item.color].path}
+          //             alt={item.name}
+          //             fluid
+          //             rounded
+          //           />
+          //         </Col>
+          //         <Col>
+          //           <Link href={`/product/${item.id}`}>{item.name}</Link>
+          //         </Col>
+          //         <Col md={4}>
+          //           {item.qty} x ${item.price} = ${item.qty * item.price}
+          //         </Col>
+          //       </Row>
+          //     </ListGroup.Item>
+          //   ))}
+          // </ListGroup>
+        )}
       </Col>
       <Col md={4}>
         <Card>

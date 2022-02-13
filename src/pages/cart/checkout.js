@@ -1,4 +1,3 @@
-import { useUser } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router';
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
@@ -7,17 +6,16 @@ import Store from '../../store/context-api';
 
 const Checkout = () => {
   const router = useRouter();
-  const { user } = useUser();
-  const [firstName, setFirstName] = useState(user?.given_name);
-  const [lasttName, setLastName] = useState(user?.family_name);
-  const [email, setEmail] = useState(user?.email);
+  const { cartItems, saveAddress, shippingAddress, userInfo } =
+    useContext(Store);
+  const [firstName, setFirstName] = useState('');
+  const [lasttName, setLastName] = useState('');
+  const [email, setEmail] = useState(userInfo?.user.email);
   const [country, setCountry] = useState('');
   const [address, setAddress] = useState('');
   const [postalCode, setPostalCode] = useState('');
   const [phone, setPhone] = useState('');
   const [state, setState] = useState('');
-
-  const { cartItems, saveAddress, shippingAddress } = useContext(Store);
 
   const totalPrice = cartItems
     ?.reduce((acc, i) => acc + i.price * i.qty, 0)
@@ -45,7 +43,7 @@ const Checkout = () => {
   useEffect(() => {
     if (shippingAddress) return router.push('/cart/placeorder');
   }, []);
-
+  console.log(userInfo);
   return (
     <section className='shop checkout section'>
       <Container>
