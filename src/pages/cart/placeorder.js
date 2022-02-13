@@ -37,7 +37,6 @@ const PlaceOrder = () => {
     router.push('/');
   };
 
-  const order = {};
   return (
     <Row>
       <Col md={8}>
@@ -54,7 +53,7 @@ const PlaceOrder = () => {
           <tbody>
             <tr>
               <td className='price' data-title='Price'>
-                {shippingAddress.firstName}
+                {shippingAddress?.firstName}
               </td>
               <td className='price' data-title='Price'>
                 {shippingAddress?.address} - {shippingAddress?.state}
@@ -64,7 +63,7 @@ const PlaceOrder = () => {
               </td>
 
               <td className='price' data-title='Price'>
-                {shippingAddress.phone}
+                {shippingAddress?.phone}
               </td>
             </tr>
           </tbody>
