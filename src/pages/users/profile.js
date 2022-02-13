@@ -1,26 +1,16 @@
-import { useUser } from '@auth0/nextjs-auth0';
-import React from 'react';
-import { Row, Col, ListGroup, Spinner } from 'react-bootstrap';
-import Image from 'next/image';
+import React, { useContext } from 'react';
+import { Row, Col, ListGroup } from 'react-bootstrap';
+import Store from '../../store/context-api';
 
 const Profile = () => {
-  const { user, isLoading } = useUser();
-
-  if (isLoading) return <Spinner />;
+  const { userInfo } = useContext(Store);
   return (
     <Row>
       <Col md={6}>
-        <Image
-          height={150}
-          src={user.picture}
-          layout='intrinsic'
-          width={200}
-          className='rounded'
-        />
         <h2>User Information</h2>
         <ListGroup variant='flush'>
-          <ListGroup.Item>Email : {user.email}</ListGroup.Item>
-          <ListGroup.Item>Name : {user.name}</ListGroup.Item>
+          <ListGroup.Item>Email : {userInfo?.user.email}</ListGroup.Item>
+          <ListGroup.Item>username : {userInfo?.user.username}</ListGroup.Item>
         </ListGroup>
       </Col>
       <Col md={6}>
