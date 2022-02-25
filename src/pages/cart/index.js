@@ -34,23 +34,27 @@ const CartPage = () => {
       <Container>
         <Row>
           <Col md={12}>
-            <Table striped hover responsive className='table shopping-summery'>
-              <thead>
-                <tr>
-                  <th>PRODUCT</th>
-                  <th>NAME</th>
-                  <th className='text-center '>UNIT PRICE</th>
+            {cartItems?.length > 0 ? (
+              <Table
+                striped
+                hover
+                responsive
+                className='table shopping-summery'
+              >
+                <thead>
+                  <tr>
+                    <th>PRODUCT</th>
+                    <th>NAME</th>
+                    <th className='text-center '>UNIT PRICE</th>
 
-                  <th className='text-center'>Size</th>
-                  <th className='text-center'>QUANTITY</th>
-                  <th className='text-center'>TOTAL</th>
-                  <th className='text-center'>
-                    <i className='fas fa-trash'></i>
-                  </th>
-                </tr>
-              </thead>
-
-              {cartItems?.length > 0 ? (
+                    <th className='text-center'>Size</th>
+                    <th className='text-center'>QUANTITY</th>
+                    <th className='text-center'>TOTAL</th>
+                    <th className='text-center'>
+                      <i className='fas fa-trash'></i>
+                    </th>
+                  </tr>
+                </thead>
                 <tbody>
                   {cartItems.map((item) => (
                     <tr key={item.id}>
@@ -98,12 +102,13 @@ const CartPage = () => {
                     </tr>
                   ))}
                 </tbody>
-              ) : (
-                <Alert className='align-self-center' variant='danger'>
-                  Your Cart is empty
-                </Alert>
-              )}
-            </Table>
+              </Table>
+            ) : (
+              <Alert variant='danger'>
+                Your Cart is empty{' '}
+                <Link href={'/#products'}>Back to shopping?</Link>
+              </Alert>
+            )}
           </Col>
         </Row>
         <Row>
@@ -144,11 +149,15 @@ const CartPage = () => {
                       </li>
                     </ul>
                     <div className='button5'>
-                      <Button onClick={handlerCheckout} variant='danger'>
+                      <Button
+                        disabled={cartItems.length === 0}
+                        onClick={handlerCheckout}
+                        variant='danger'
+                      >
                         Checkout
                       </Button>
 
-                      <Link href='/' passHref>
+                      <Link href='/#products' passHref>
                         <Button variant='dark' className='py-2'>
                           Continue shopping
                         </Button>

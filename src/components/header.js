@@ -42,7 +42,7 @@ const Header = () => {
                 <a className='nav-link'></a>
               </Nav.Link>
               <Nav.Link className='nav-item'>
-                <Link href='#products' passHref>
+                <Link href='/#products' passHref>
                   <a className='nav-link'>Products</a>
                 </Link>
               </Nav.Link>
@@ -50,7 +50,7 @@ const Header = () => {
                 <a className='nav-link'></a>
               </Nav.Link>
               <Nav.Link className='nav-item'>
-                <Link href='#about' passHref>
+                <Link href='/#about' passHref>
                   <a className='nav-link'>About</a>
                 </Link>
               </Nav.Link>

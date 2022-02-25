@@ -75,12 +75,12 @@ const Footer = () => {
                           <a href='#'>Checkout</a>
                         </li>
                         <li>
-                          <Link href='/api/auth/login' passHref>
+                          <Link href='/users/login' passHref>
                             <a>Login</a>
                           </Link>
                         </li>
                         <li>
-                          <Link href='/api/auth/login' passHref>
+                          <Link href='/users/register' passHref>
                             <a>Register</a>
                           </Link>
                         </li>

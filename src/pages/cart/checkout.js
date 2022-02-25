@@ -42,8 +42,9 @@ const Checkout = () => {
 
   useEffect(() => {
     if (shippingAddress) return router.push('/cart/placeorder');
+    if (cartItems.length === 0) return router.push('/cart');
   }, []);
-  console.log(userInfo);
+
   return (
     <section className='shop checkout section'>
       <Container>
