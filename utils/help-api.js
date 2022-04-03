@@ -1,9 +1,6 @@
 import axios from 'axios';
 
-export const baseUrl =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:1337'
-    : 'https://jamstackshop-server.herokuapp.com';
+export const baseUrl = 'https://jamstackshop-server.herokuapp.com';
 
 export const getProducts = async () => {
   const { data } = await axios.get(`${baseUrl}/products`);
