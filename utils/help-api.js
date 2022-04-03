@@ -10,17 +10,6 @@ export const getProducts = async () => {
   return data;
 };
 
-export const getAllProducts = async () => {
-  try {
-    const { data } = await axios.get(
-      'https://strapi-testhicm.herokuapp.com/api/products?populate=*'
-    );
-    return data;
-  } catch (error) {
-    return error;
-  }
-};
-
 export const getProductById = async (id) => {
   const { data } = await axios.get(`${baseUrl}/products/${id}`);
   return data;
