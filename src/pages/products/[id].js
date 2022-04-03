@@ -1,19 +1,19 @@
 import { Button, Col, Form, ListGroup, Row } from 'react-bootstrap';
 import Link from 'next/link';
 import Head from 'next/head';
-import { getAllProducts, getProductById } from '../../../utils/help-api';
+import { getProductById, getProducts } from '../../../utils/help-api';
 import Image from 'next/image';
 import { useContext, useState } from 'react';
 import Store from '../../store/context-api';
 
 const ProductDetail = ({ product }) => {
-  const { name, price, description, category } = product.attributes;
+  const { name, price, description, category } = product;
 
   const [selectImage, setSelectImage] = useState(0);
   const [size, setSize] = useState('S');
 
-  const image = product.attributes.images[selectImage].path;
-  const images = product.attributes.images;
+  const image = product.images[selectImage].path;
+  const images = product.images;
   //state
   const { addToCart } = useContext(Store);
 
@@ -44,7 +44,7 @@ const ProductDetail = ({ product }) => {
       </Link>
 
       <Row className='mt-2 mb-5'>
-        <Col md={6}>
+        <Col md={6} className='shadow bg-white rounded '>
           <Image
             className='p-5'
             src={image}
@@ -80,7 +80,7 @@ const ProductDetail = ({ product }) => {
           </ListGroup>
         </Col>
 
-        <Col md={6}>
+        <Col md={5} className='shadow bg-white rounded ms-1 '>
           <ListGroup variant='flush'>
             <ListGroup.Item as='h2'>{name}</ListGroup.Item>
             <ListGroup.Item as='h5'>
@@ -151,16 +151,16 @@ export const getStaticProps = async (context) => {
 
   return {
     props: {
-      product: data.data,
+      product: data,
     },
     revalidate: 180,
   };
 };
 
 export const getStaticPaths = async () => {
-  const products = await getAllProducts();
-  const paths = products.data.map((product) => ({
-    params: { id: product.id.toString() },
+  const products = await getProducts();
+  const paths = products.map((product) => ({
+    params: { id: String(product.id) },
   }));
 
   return {

@@ -3,19 +3,21 @@ import { Card } from 'react-bootstrap';
 import Link from 'next/link';
 
 const Product = ({ product }) => {
-  const { name, price } = product.attributes;
   const randomNumber = Math.floor(Math.random() * 4);
-  const image = product.attributes.images[randomNumber].path;
 
   return (
     <Card className='my-3 p-3 rounded shadow'>
       <Link href={`/products/${product.id}`} passHref>
         <a style={{ backgroundColor: '#ebebeb' }}>
-          <Card.Img variant='top' className='p-5' src={image} />
+          <Card.Img
+            variant='top'
+            className='p-5'
+            src={product.images[randomNumber].path}
+          />
 
           <Card.Body>
-            <Card.Title as='h4'>{name}</Card.Title>
-            <Card.Title>${price}</Card.Title>
+            <Card.Title as='h4'>{product.name}</Card.Title>
+            <Card.Title>${product.price}</Card.Title>
           </Card.Body>
         </a>
       </Link>

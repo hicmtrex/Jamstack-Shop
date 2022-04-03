@@ -5,7 +5,7 @@
 }
 
 body {
-  background-color: rgba(255, 255, 255, 0.7);
+  background: #f0f2f7 !important;
 }
 
 a {
@@ -14,7 +14,7 @@ a {
 }
 
 main {
-  min-height: 84.5vh;
+  min-height: 85vh;
 }
 
 .container_app {
@@ -1014,6 +1014,27 @@ form input[type='submit']:focus {
   border-radius: 0;
   text-transform: uppercase;
   color: #fff;
+}
+
+.remove__item {
+  display: block;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: #ff5252;
+  color: #fff;
+  line-height: 23px;
+  text-align: center;
+  box-shadow: 0 3px 12px 0 rgba(255, 82, 82, 0.5);
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cardfont {
+  font-size: 15px !important;
 }
 /*======================================
    End Checkout Form CSS

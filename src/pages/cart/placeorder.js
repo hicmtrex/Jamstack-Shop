@@ -12,14 +12,18 @@ import Store from '../../store/context-api';
 import Link from 'next/link';
 import { PayPalButton } from 'react-paypal-button-v2';
 import { useRouter } from 'next/router';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { baseUrl } from '../../../utils/help-api';
 
 const PlaceOrder = () => {
-  const { cartItems, shippingAddress } = useContext(Store);
+  const { cartItems, shippingAddress, userInfo, clearCart } = useContext(Store);
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (!shippingAddress) return router.push('/cart/checkout');
-  // }, [shippingAddress]);
+  useEffect(() => {
+    if (!shippingAddress) return router.push('/cart/checkout');
+    if (!userInfo) return router.push('/users/login');
+  }, [shippingAddress]);
 
   const totalPrice = cartItems
     ?.reduce((acc, i) => acc + i.price * i.qty, 0)
@@ -33,8 +37,29 @@ const PlaceOrder = () => {
     Number(taxPrice)
   ).toFixed(2);
 
-  const paypalHandler = () => {
-    router.push('/');
+  const paypalHandler = async () => {
+    const item = {
+      cartItems,
+      shippingAddress,
+      total: totalPrice,
+      user: userInfo.user.id,
+    };
+
+    try {
+      const res = await axios.post(`${baseUrl}/orders`, item, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userInfo.jwt}`,
+        },
+      });
+      if (res.data) {
+        router.push('/users/profile');
+        toast.success('you order has been created 😊');
+        clearCart();
+      }
+    } catch (error) {
+      return toast.error('something went wrong!');
+    }
   };
 
   return (
@@ -151,7 +176,6 @@ const PlaceOrder = () => {
                 </Col>
               </Row>
             </ListGroup.Item>
-
             <PayPalButton amount={lastPrice} onSuccess={paypalHandler} />
           </ListGroup>
         </Card>

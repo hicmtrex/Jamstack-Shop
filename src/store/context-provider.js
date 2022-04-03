@@ -1,11 +1,13 @@
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import React, { useEffect, useReducer } from 'react';
-import { baseUrl } from '../../utils/help-api';
+import { baseUrl, setError } from '../../utils/help-api';
 import Store from './context-api';
+import toast from 'react-hot-toast';
 
 const LOCAL_STORAGE_CART = 'jamstack-shop-cartItems';
 const LOCAL_STORAGE_USER = 'jamstack-shop-user';
+const LOCAL_STORAGE_ADDRESS = 'jamstack-shop-address';
 
 const ACTIONS = {
   ADD_TO_CART: 'ADD_TO_CART',
@@ -16,6 +18,10 @@ const ACTIONS = {
   //auth
   USER_REGISTER: 'USER_REGISTER',
   USER_LOGIN: 'USER_LOGIN',
+  //orders
+  GET_USER_ORDERS_REQUEST: 'GET_USER_ORDERS_REQUEST',
+  GET_USER_ORDERS_SUCCESS: 'GET_USER_ORDERS_SUCCESS',
+  GET_USER_ORDERS_FAIL: 'GET_USER_ORDERS_FAIL',
 };
 
 const userInfoStorage =
@@ -32,10 +38,20 @@ const cartInfoStorage =
       : []
     : [];
 
+const addressInfoStorage =
+  typeof window !== 'undefined'
+    ? localStorage.getItem(LOCAL_STORAGE_ADDRESS)
+      ? JSON.parse(localStorage.getItem(LOCAL_STORAGE_ADDRESS))
+      : null
+    : null;
+
 const initialState = {
   userInfo: userInfoStorage,
-  shippingAddress: null,
+  shippingAddress: addressInfoStorage,
   cartItems: cartInfoStorage,
+  userOrders: [],
+  loading: false,
+  error: null,
 };
 
 const reducer = (state, action) => {
@@ -95,12 +111,20 @@ const reducer = (state, action) => {
 
     case ACTIONS.CLEAR_CART:
       return { cartItems: [] };
+
     case ACTIONS.SHIPPING_ADDRESS:
       return { ...state, shippingAddress: action.payload };
     case ACTIONS.USER_REGISTER:
       return { ...state, userInfo: action.payload };
     case ACTIONS.USER_LOGIN:
       return { ...state, userInfo: action.payload };
+    //orders
+    case ACTIONS.GET_USER_ORDERS_REQUEST:
+      return { ...state, userOrders: [], loading: true };
+    case ACTIONS.GET_USER_ORDERS_SUCCESS:
+      return { ...state, loading: false, userOrders: action.payload };
+    case ACTIONS.GET_USER_ORDERS_FAIL:
+      return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }
@@ -116,9 +140,9 @@ const ContextProvider = ({ children }) => {
       type: ACTIONS.ADD_TO_CART,
       payload: {
         id: product.id,
-        name: product.attributes?.name,
-        price: product.attributes?.price,
-        images: product.attributes?.images,
+        name: product.name,
+        price: product.price,
+        images: product.images,
         qty: product.qty,
         color,
         size,
@@ -142,32 +166,36 @@ const ContextProvider = ({ children }) => {
 
   const userRegister = async (user) => {
     try {
-      const { data } = await axios.post(
-        `${baseUrl}/api/auth/local/register`,
-        user,
-        {
-          headers: {
-            Accept: 'application/json',
-          },
-        }
-      );
-      dispatch({ type: ACTIONS.USER_REGISTER, payload: data });
-      localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(data));
+      const res = await axios.post(`${baseUrl}/auth/local/register`, user, {
+        headers: {
+          Accept: 'application/json',
+        },
+      });
+      if (res.data) {
+        dispatch({ type: ACTIONS.USER_REGISTER, payload: res.data });
+        localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(data));
+        router.push('/');
+      }
     } catch (error) {
-      console.log(error);
+      toast.error('invalid input!');
     }
   };
 
   const userLogin = async (user) => {
     try {
-      const { data } = await axios.post(
-        `https://strapi-testhicm.herokuapp.com/api/auth/local`,
-        user
-      );
-      dispatch({ type: ACTIONS.USER_LOGIN, payload: data });
-      localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(data));
+      const res = await axios.post(`${baseUrl}/auth/local`, user);
+
+      if (res.data) {
+        dispatch({ type: ACTIONS.USER_LOGIN, payload: res.data });
+        localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(res.data));
+
+        toast(`Welcome ${res.data.user.username}`, {
+          icon: '👏',
+        });
+        router.push('/');
+      }
     } catch (error) {
-      console.log(error);
+      toast.error('Wrong email or password');
     }
   };
 
@@ -175,12 +203,44 @@ const ContextProvider = ({ children }) => {
     dispatch({ type: ACTIONS.CLEAR_CART });
     localStorage.removeItem(LOCAL_STORAGE_CART);
     localStorage.removeItem(LOCAL_STORAGE_USER);
+    localStorage.removeItem(LOCAL_STORAGE_ADDRESS);
     router.push('/users/login');
+  };
+
+  const clearCart = () => {
+    dispatch({ type: ACTIONS.CLEAR_CART });
+  };
+
+  //orders
+
+  const getUserOrders = async () => {
+    try {
+      dispatch({ type: ACTIONS.GET_USER_ORDERS_REQUEST });
+      const res = await axios.get(`${baseUrl}/orders`, {
+        headers: {
+          Accept: 'application/json',
+          Authorization: `Bearer ${state.userInfo.jwt}`,
+        },
+      });
+      if (res.data) {
+        dispatch({ type: ACTIONS.GET_USER_ORDERS_SUCCESS, payload: res.data });
+      }
+    } catch (error) {
+      toast.error(setError(error));
+      dispatch({
+        type: ACTIONS.GET_USER_ORDERS_FAIL,
+        payload: error.message,
+      });
+    }
   };
 
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_CART, JSON.stringify(state.cartItems));
-  }, [state.cartItems]);
+    localStorage.setItem(
+      LOCAL_STORAGE_ADDRESS,
+      JSON.stringify(state.shippingAddress)
+    );
+  }, [state.cartItems, state.shippingAddress]);
 
   const values = {
     addToCart,
@@ -193,6 +253,7 @@ const ContextProvider = ({ children }) => {
     logoutHandler,
     userRegister,
     userLogin,
+    clearCart,
     userInfo: state.userInfo,
   };
   return <Store.Provider value={values}>{children}</Store.Provider>;

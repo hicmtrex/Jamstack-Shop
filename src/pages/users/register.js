@@ -95,7 +95,7 @@ const Register = () => {
                       </Form.Group>
                     </div>
                     <div className='d-flex justify-content-center mx-4 mb-3 mb-lg-4'>
-                      <Button type='submit' className='btn-lg'>
+                      <Button type='submit' className='w-full'>
                         Register
                       </Button>
                     </div>

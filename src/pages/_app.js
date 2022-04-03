@@ -1,3 +1,4 @@
+import { Toaster } from 'react-hot-toast';
 import Layout from '../components/layout';
 import ContextProvider from '../store/context-provider';
 import '../styles/bootstrap.min .css';
@@ -9,6 +10,7 @@ function MyApp({ Component, pageProps }) {
     <ContextProvider>
       <Layout>
         <Component {...pageProps} />
+        <Toaster position='top-center' reverseOrder={false} />
       </Layout>
     </ContextProvider>
   );

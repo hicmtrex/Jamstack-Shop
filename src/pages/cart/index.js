@@ -15,7 +15,8 @@ import Store from '../../store/context-api';
 const CartPage = () => {
   const { cartItems, addToCart, removeFromCart, deleteFromCart } =
     useContext(Store);
-  console.log(cartItems);
+
+    
   const totalPrice = cartItems
     ?.reduce((acc, i) => acc + i.price * i.qty, 0)
     .toFixed(2);

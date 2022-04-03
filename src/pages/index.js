@@ -1,7 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
 import { Col, Row } from 'react-bootstrap';
-import { getAllProducts } from '../../utils/help-api';
+import { getProducts } from '../../utils/help-api';
 import Product from '../components/product';
 
 const HomePage = ({ products }) => {
@@ -24,10 +24,10 @@ const HomePage = ({ products }) => {
 };
 
 export const getStaticProps = async () => {
-  const data = await getAllProducts();
+  const data = await getProducts();
   return {
     props: {
-      products: data.data,
+      products: data,
     },
     revalidate: 600,
   };
