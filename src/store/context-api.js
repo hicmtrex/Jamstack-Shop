@@ -15,6 +15,7 @@ const Store = createContext({
   saveAddress: (address) => {},
   //orders
   getUserOrders: () => {},
+  userOrders: [],
 });
 
 export default Store;

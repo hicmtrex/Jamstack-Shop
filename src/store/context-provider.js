@@ -110,7 +110,7 @@ const reducer = (state, action) => {
       };
 
     case ACTIONS.CLEAR_CART:
-      return { cartItems: [] };
+      return { ...state, cartItems: [] };
 
     case ACTIONS.SHIPPING_ADDRESS:
       return { ...state, shippingAddress: action.payload };
@@ -160,6 +160,7 @@ const ContextProvider = ({ children }) => {
 
   const saveAddress = (address) => {
     dispatch({ type: ACTIONS.SHIPPING_ADDRESS, payload: address });
+    localStorage.setItem(LOCAL_STORAGE_ADDRESS, JSON.stringify(address));
   };
 
   //user
@@ -175,15 +176,19 @@ const ContextProvider = ({ children }) => {
         dispatch({ type: ACTIONS.USER_REGISTER, payload: res.data });
         localStorage.setItem(LOCAL_STORAGE_USER, JSON.stringify(data));
         router.push('/');
+      } else {
+        toast.error('invalid input!');
       }
     } catch (error) {
-      toast.error('invalid input!');
+      toast.error('invalid input!' + error.message);
     }
   };
 
   const userLogin = async (user) => {
     try {
-      const res = await axios.post(`${baseUrl}/auth/local`, user);
+      const res = await axios.post(`${baseUrl}/auth/local`, user, {
+        'Content-Type': 'application/json',
+      });
 
       if (res.data) {
         dispatch({ type: ACTIONS.USER_LOGIN, payload: res.data });
@@ -236,11 +241,7 @@ const ContextProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_CART, JSON.stringify(state.cartItems));
-    localStorage.setItem(
-      LOCAL_STORAGE_ADDRESS,
-      JSON.stringify(state.shippingAddress)
-    );
-  }, [state.cartItems, state.shippingAddress]);
+  }, [state.cartItems]);
 
   const values = {
     addToCart,
@@ -255,6 +256,9 @@ const ContextProvider = ({ children }) => {
     userLogin,
     clearCart,
     userInfo: state.userInfo,
+    //orders
+    getUserOrders,
+    userOrders: state.userOrders,
   };
   return <Store.Provider value={values}>{children}</Store.Provider>;
 };
