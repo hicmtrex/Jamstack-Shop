@@ -2,7 +2,7 @@ repo_name: hicmtrex/Jamstack-Shop
 report_id: 6db9459b3ce7d46a67bfed457db523b7
 version: 0.1
 repo_type: Public
-timestamp: '2024-01-05T08:17:20+00:00'
+timestamp: '2024-02-29T19:09:58+00:00'
 requested_by: invalid-email-address
 provider: github
 branch: main
@@ -44,7 +44,7 @@ tools:
   last_updated_by: Firstname Lastname
   last_updated_on: 2022-01-27 23:31:08.000000000 Z
 - name: Next.js
-  description: 'A small framework for server-rendered universal JavaScript apps '
+  description: A small framework for server-rendered universal JavaScript apps
   website_url: https://nextjs.org/
   version: 12.0.8
   open_source: true
